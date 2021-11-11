@@ -40,12 +40,13 @@ typedef struct _SPB_CONTEXT
 } SPB_CONTEXT;
 
 NTSTATUS
-SpbReadDataSynchronously(
-_In_ SPB_CONTEXT *SpbContext,
-_In_reads_bytes_(Length) PVOID Data,
-_In_ ULONG Length
+SpbXferDataSynchronously(
+	_In_ SPB_CONTEXT* SpbContext,
+	_In_ PVOID SendData,
+	_In_ ULONG SendLength,
+	_In_reads_bytes_(Length) PVOID Data,
+	_In_ ULONG Length
 );
-
 
 VOID
 SpbTargetDeinitialize(

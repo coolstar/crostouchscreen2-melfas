@@ -44,11 +44,8 @@ DriverEntry(
 static NTSTATUS mip4_i2c_xfer(PMLFS_CONTEXT pDevice, uint8_t *write_buf, unsigned int write_len,
 	uint8_t *read_buf, unsigned int read_len) {
 	NTSTATUS status;
-	status = SpbWriteDataSynchronously(&pDevice->I2CContext, write_buf, write_len);
-	if (!NT_SUCCESS(status)) {
-		return status;
-	}
-	status = SpbReadDataSynchronously(&pDevice->I2CContext, read_buf, read_len);
+
+	status = SpbXferDataSynchronously(&pDevice->I2CContext, write_buf, write_len, read_buf, read_len);
 	return status;
 }
 
