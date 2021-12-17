@@ -207,7 +207,12 @@ Status
 
 	status = SpbTargetInitialize(FxDevice, &pDevice->I2CContext);
 
-	BOOTTOUCHSCREEN(pDevice);
+	if (!NT_SUCCESS(status))
+	{
+		return status;
+	}
+
+	status = BOOTTOUCHSCREEN(pDevice);
 
 	if (!NT_SUCCESS(status))
 	{
@@ -505,10 +510,10 @@ BOOLEAN OnInterruptIsr(
 	NTSTATUS status;
 
 	if (!pDevice->ConnectInterrupt)
-		return true;
+		return false;
 
 	if (!pDevice->TouchScreenBooted)
-		return true;
+		return false;
 
 	uint8_t cmd[2];
 	uint8_t buf[MIP4_BUF_SIZE];
@@ -521,7 +526,7 @@ BOOLEAN OnInterruptIsr(
 	status = mip4_i2c_xfer(pDevice, cmd, sizeof(cmd), buf, 1);
 
 	if (!NT_SUCCESS(status)) {
-		return true;
+		return false;
 	}
 
 	size = buf[0] & 0x7F;
