@@ -156,6 +156,8 @@ typedef struct _MLFS_CONTEXT
 
 	WDFQUEUE ReportQueue;
 
+	WDFQUEUE IdleQueue;
+
 	BYTE DeviceMode;
 
 	SPB_CONTEXT I2CContext;
@@ -201,6 +203,20 @@ typedef struct _MLFS_CONTEXT
 } MLFS_CONTEXT, *PMLFS_CONTEXT;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(MLFS_CONTEXT, GetDeviceContext)
+
+//
+// Power Idle Workitem context
+// 
+typedef struct _IDLE_WORKITEM_CONTEXT
+{
+	// Handle to a WDF device object
+	WDFDEVICE FxDevice;
+
+	// Handle to a WDF request object
+	WDFREQUEST FxRequest;
+
+} IDLE_WORKITEM_CONTEXT, * PIDLE_WORKITEM_CONTEXT;
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(IDLE_WORKITEM_CONTEXT, GetIdleWorkItemContext)
 
 //
 // Function definitions
@@ -278,6 +294,11 @@ MlfsGetFeature(
 PCHAR
 DbgHidInternalIoctlString(
 	IN ULONG        IoControlCode
+);
+
+VOID
+MlfsCompleteIdleIrp(
+	IN PMLFS_CONTEXT FxDeviceContext
 );
 
 //
